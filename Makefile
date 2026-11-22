@@ -8,7 +8,9 @@
 PREFIX ?= $(HOME)/.local
 CONFIG ?= $(HOME)/.config/lacia/serve.conf
 STATE  ?= $(HOME)/.local/state/lacia
-CODEX  ?= codex
+# 依頼を渡す先です。Codex があれば Codex、なければ Claude Code を使います。
+# 決めて指定するときは、make install AGENT=claude のようにします。
+AGENT  ?= $(shell command -v codex >/dev/null 2>&1 && echo codex || echo claude)
 LACIA  := $(PREFIX)/bin/lacia
 ROOT   := $(CURDIR)
 VERSION := $(shell cat LACIA_VERSION)
@@ -38,7 +40,7 @@ config:
 	@if [ -e $(CONFIG) ]; then \
 		echo "$(CONFIG) は、すでにあるので、そのままにしました。"; \
 	else \
-		printf 'root = %s\nstate = %s\ncodex = %s\ngit-sync = true\n' "$(ROOT)" "$(STATE)" "$(CODEX)" > $(CONFIG); \
+		printf 'root = %s\nstate = %s\n%s = %s\ngit-sync = true\n' "$(ROOT)" "$(STATE)" "$(AGENT)" "$(AGENT)" > $(CONFIG); \
 		echo "$(CONFIG) を作りました。"; \
 	fi
 

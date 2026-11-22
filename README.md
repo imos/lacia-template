@@ -14,7 +14,7 @@
 
 1. このリポジトリーを、自分の非公開のリポジトリーとして複製します。fork ではなく、複製にしてください。記録には、ほかの人に見せないものが入ります。
 2. `.lacia/config.json` の `user` を、レイシアに呼んでほしい名前（たとえば「田中さん」）に書き換えます。
-3. `make install` を実行します。Codex のコマンドの名前が `codex` でないときは、`make install CODEX=<名前>` とします。
+3. `make install` を実行します。Web からの依頼と予約は、Codex があれば Codex へ、なければ Claude Code へ渡します。決めて指定するときは、`make install AGENT=claude` のようにします。
 4. `make serve` でサーバーを動かして、`http://127.0.0.1:10148/` を開きます。
 5. 別の端末で、`lacia codex` か `lacia claude` を実行すると、レイシアとして会話が始まります。
 
