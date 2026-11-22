@@ -1,9 +1,12 @@
 # レイシアを、この記録のリポジトリーで使えるようにします。
 #
-#   make install                      LACIA_VERSION の版の lacia を入れて、設定を作ります
+#   make install                      要るものを確かめ、LACIA_VERSION の版の lacia をビルドして、設定を作ります
+#   make check                        要るものがそろっているかを、確かめるだけです
 #   make install LACIA_SRC=../lacia   手元のソースからビルドします（コードを直したい方へ）
 #   make serve                        サーバーを動かします（http://127.0.0.1:10148/）
 #   make notifier                     Mac の通知アプリを入れます（Xcode のコマンドライン ツールが要ります）
+#   make autostart                    ログインのときに、サーバーが自動で起動するようにします
+#   make autostart-off                自動の起動をやめます
 #   make uninstall                    入れた lacia と設定を消します（記録は消しません）
 
 PREFIX ?= $(HOME)/.local
@@ -18,9 +21,9 @@ LACIA  := $(PREFIX)/bin/lacia
 ROOT   := $(CURDIR)
 VERSION := $(shell cat LACIA_VERSION)
 
-.PHONY: install binary config serve notifier uninstall
+.PHONY: install check prepare binary config serve notifier autostart autostart-off uninstall
 
-install: binary config
+install: prepare binary config
 	@if grep -q '"利用者さん"' .lacia/config.json && [ -t 0 ]; then $(LACIA) init; fi
 	@echo
 	@echo "入りました。$(PREFIX)/bin が PATH にあることを確かめてください。"
@@ -28,8 +31,16 @@ install: binary config
 	@echo "  lacia codex    Codex を、レイシアとして起動します"
 	@echo "  lacia claude   Claude Code を、レイシアとして起動します"
 	@echo "  make notifier  Mac の通知アプリを入れます（入れなくても使えます）"
+	@echo "  make autostart ログインのときに、サーバーが自動で起動するようにします"
 
-binary:
+# 足りないものは、Homebrew があれば入れます。入れるのは Go と gh だけです。
+prepare:
+	@PREFIX="$(PREFIX)" LACIA_SRC="$(LACIA_SRC)" tools/prepare.sh
+
+check:
+	@PREFIX="$(PREFIX)" LACIA_SRC="$(LACIA_SRC)" tools/prepare.sh --check
+
+binary: prepare
 	@mkdir -p $(PREFIX)/bin
 ifdef LACIA_SRC
 	cd $(LACIA_SRC) && go build -o $(LACIA) ./cmd/lacia
@@ -66,6 +77,14 @@ notifier:
 	@echo "通知アプリを入れました。macOS が通知の許可を尋ねたら、許可してください。"
 	@echo "外すときは、lacia のソースの macos/notifier/manage.py uninstall を使います。"
 
+# make serve と同時には動かせません。同じアドレスで待ち受けるためです。
+autostart:
+	@tools/autostart.sh on "$(LACIA)" "$(CONFIG)" "$(STATE)"
+
+autostart-off:
+	@tools/autostart.sh off
+
 uninstall:
+	@tools/autostart.sh off >/dev/null 2>&1 || true
 	rm -f $(LACIA) $(CONFIG)
 	@echo "記録（$(ROOT)）と、状態（$(STATE)）は、残してあります。"

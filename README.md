@@ -2,13 +2,15 @@
 
 レイシアを、自分の Mac で使い始めるためのひな形です。このリポジトリーを複製して、`make install` を実行すると、`lacia` コマンドと設定がそろいます。タスクと記録は、複製したリポジトリーにたまっていきます。
 
-まだ下書きです。ログインのときの自動の起動は、入っていません。サーバーは、`make serve` で動かしているあいだだけ動きます。
+まだ下書きです。
 
 ## 必要なもの
 
-- Go（`lacia` をビルドします）
+- Go（`lacia` を、手元でビルドします）
 - Git と、`imos/lacia` を読める GitHub の認証（`gh auth login` のあと、`gh auth setup-git`）
 - Codex か Claude Code の、どちらか
+
+`make install` は、最初にこれらを確かめます。Homebrew が入っていれば、足りない Go と gh を自動で入れます。ログインが要るものと、Codex か Claude Code かの選択は、入れ方を案内して止まります。確かめるだけのときは、`make check` を実行します。
 
 ## 始めかた
 
@@ -17,7 +19,8 @@
 3. Web からの依頼と予約は、Codex があれば Codex へ、なければ Claude Code へ渡します。決めて指定するときは、`make install AGENT=claude` のようにします。
 4. `make serve` でサーバーを動かして、`http://127.0.0.1:10148/` を開きます。
 5. 別の端末で、`lacia codex` か `lacia claude` を実行すると、レイシアとして会話が始まります。
-6. 確認待ちのタスクや会議を Mac の通知で受け取りたいときは、`make notifier` を実行します。Xcode のコマンドライン ツールが要ります。入れなくても使えます。
+6. サーバーを、ログインのときに自動で起動したいときは、`make autostart` を実行します。止まったときも、30秒あけて起動し直します。`make serve` とは、同時に動かせません。やめるときは、`make autostart-off` です。ログは `~/.local/state/lacia/serve.log` に出ます。
+7. 確認待ちのタスクや会議を Mac の通知で受け取りたいときは、`make notifier` を実行します。Xcode のコマンドライン ツールが要ります。入れなくても使えます。
 
 予約の時刻に Mac が眠っていたときは、起きたあとに実行します。眠っていたあいだの回が何回あっても、1回にまとめます。
 
@@ -31,6 +34,7 @@
 | `.lacia/config.json` | 領域と、呼び名 | 自分 |
 | `.lacia/serve.conf` | 表示の名前、予定の連携 | 自分 |
 | `memory/` | 基本の情報、アカウントの対応、いまの状況 | 自分とレイシア |
+| `tools/` | `make` が使うスクリプト | 書き換えません |
 | `schedules/` | 決まった時刻に動かす仕事 | 自分とレイシア |
 | `work/tasks/`、`personal/tasks/` | タスク | レイシア |
 
