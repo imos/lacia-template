@@ -1,0 +1,16 @@
+# 作業用のファイル、ダウンロード、キャッシュ
+/local/
+/tmp/
+.DS_Store
+__pycache__/
+
+# 認証の情報は、ここへ置きません
+.env
+.env.*
+*.pem
+*.key
+auth.json
+credentials/
+
+# 大きな成果物は、Git に入れません
+/*/tasks/*/*/files/
