@@ -3,6 +3,7 @@
 #   make install                      LACIA_VERSION の版の lacia を入れて、設定を作ります
 #   make install LACIA_SRC=../lacia   手元のソースからビルドします（コードを直したい方へ）
 #   make serve                        サーバーを動かします（http://127.0.0.1:10148/）
+#   make notifier                     Mac の通知アプリを入れます（Xcode のコマンドライン ツールが要ります）
 #   make uninstall                    入れた lacia と設定を消します（記録は消しません）
 
 PREFIX ?= $(HOME)/.local
@@ -11,18 +12,22 @@ STATE  ?= $(HOME)/.local/state/lacia
 # 依頼を渡す先です。Codex があれば Codex、なければ Claude Code を使います。
 # 決めて指定するときは、make install AGENT=claude のようにします。
 AGENT  ?= $(shell command -v codex >/dev/null 2>&1 && echo codex || echo claude)
+# 通知アプリがつなぐ、サーバーのアドレスです。
+URL    ?= http://127.0.0.1:10148
 LACIA  := $(PREFIX)/bin/lacia
 ROOT   := $(CURDIR)
 VERSION := $(shell cat LACIA_VERSION)
 
-.PHONY: install binary config serve uninstall
+.PHONY: install binary config serve notifier uninstall
 
 install: binary config
+	@if grep -q '"利用者さん"' .lacia/config.json && [ -t 0 ]; then $(LACIA) init; fi
 	@echo
 	@echo "入りました。$(PREFIX)/bin が PATH にあることを確かめてください。"
 	@echo "  make serve     サーバーを動かして、http://127.0.0.1:10148/ を開きます"
 	@echo "  lacia codex    Codex を、レイシアとして起動します"
 	@echo "  lacia claude   Claude Code を、レイシアとして起動します"
+	@echo "  make notifier  Mac の通知アプリを入れます（入れなくても使えます）"
 
 binary:
 	@mkdir -p $(PREFIX)/bin
@@ -46,6 +51,20 @@ config:
 
 serve:
 	$(LACIA) serve --config $(CONFIG)
+
+# 通知アプリは、メニューバーに常駐して、確認待ちのタスクと会議を知らせます。
+# すでに入っているときは、何も変えずに止まります。
+notifier:
+	@src="$(LACIA_SRC)"; \
+	if [ -z "$$src" ]; then \
+		src=$$(GOPRIVATE=github.com/imos go mod download -json github.com/imos/lacia@$(VERSION) | sed -n 's/.*"Dir": "\(.*\)".*/\1/p'); \
+	fi; \
+	build=$$(mktemp -d) && \
+	python3 "$$src/macos/notifier/manage.py" build "$$build/Lacia Notifications.app" && \
+	python3 "$$src/macos/notifier/manage.py" install "$$build/Lacia Notifications.app" --lacia "$(LACIA)" --url "$(URL)" && \
+	python3 "$$src/macos/notifier/manage.py" start
+	@echo "通知アプリを入れました。macOS が通知の許可を尋ねたら、許可してください。"
+	@echo "外すときは、lacia のソースの macos/notifier/manage.py uninstall を使います。"
 
 uninstall:
 	rm -f $(LACIA) $(CONFIG)
