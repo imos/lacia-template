@@ -24,7 +24,7 @@ VERSION := $(shell cat LACIA_VERSION)
 .PHONY: install check prepare binary config serve notifier autostart autostart-off uninstall
 
 install: prepare binary config
-	@if grep -q '"利用者さん"' .lacia/config.json && [ -t 0 ]; then $(LACIA) init; fi
+	@if grep -q '"オーナーさん"' .lacia/config.json && [ -t 0 ]; then $(LACIA) init; fi
 	@echo
 	@echo "入りました。$(PREFIX)/bin が PATH にあることを確かめてください。"
 	@echo "  make serve     サーバーを動かして、http://127.0.0.1:10148/ を開きます"
