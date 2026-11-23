@@ -1,4 +1,6 @@
 {
+  "format": 1,
   "areas": ["work", "personal"],
-  "user": "オーナーさん"
+  "user": "オーナーさん",
+  "timezone": "Asia/Tokyo"
 }
