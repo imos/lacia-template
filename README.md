@@ -55,10 +55,12 @@ conversation: side
 | `.lacia/calendars.json` | 予定を読むカレンダーの一覧 | `lacia init` と自分 |
 | `memory/` | 基本の情報、アカウントの対応、いまの状況 | 自分とレイシア |
 | `tools/` | `make` が使うスクリプト | 書き換えません |
-| `schedules/` | 決まった時刻に動かす仕事 | 自分とレイシア |
+| `routines/` | 決まった時刻に動かす仕事 | 自分とレイシア |
 | `areas/work/`、`areas/personal/` | 領域ごとの、タスク（`tasks/`）、プロジェクト（`projects/`）、知識（`knowledge/`）、手順（`procedures/`） | レイシアと自分 |
 
 共通の決まりは、`lacia` の実行ファイルに入っています。`lacia rules` で読めます。変えたいときは、`rules/<名前>.md` に同じ名前の文書を置くと、そちらが使われます。節を足すだけのときは、`rules/<名前>.local.md` に書くと、同じ名前の文書の最後に足されます。
+
+Macで使う場合は、定期タスク（S1016）で `local/` の点検が毎日10:00に動きます。詳しい判断の条件は[片づける手順](areas/personal/procedures/local-storage.md)にあります。容量の上限はリポジトリーごとに10 GiBで、`.lacia/local-storage.json` の `limit_gib` で変えられます。上限を超えるときだけ要確認にし、それ以下は実行結果に記録します。点検にはPython 3を使います。Mac以外のサーバーで使う場合は、この予約の実行先をMacへ設定してから有効にしてください。
 
 記録の形は、`lacia doctor` で点検できます。直さずに、誤りとお知らせを出します。
 
