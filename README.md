@@ -75,3 +75,7 @@ make install
 ```
 
 `AGENTS.md`、`Makefile`、`LACIA_VERSION` を書き換えていなければ、取り込みは衝突しません。
+
+## ライセンス
+
+このひな形は[MITライセンス](LICENSE)で利用できます。
