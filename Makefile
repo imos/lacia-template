@@ -56,7 +56,7 @@ config:
 	@if [ -e $(CONFIG) ]; then \
 		echo "$(CONFIG) は、すでにあるので、そのままにしました。"; \
 	else \
-		printf 'root = %s\nstate = %s\n%s = %s\ngit-sync = true\n' "$(ROOT)" "$(STATE)" "$(AGENT)" "$(AGENT)" > $(CONFIG); \
+		printf 'root = %s\nstate = %s\n%s = %s\ngit-sync = true\nwindow-rollover = 05:00-12:00\n' "$(ROOT)" "$(STATE)" "$(AGENT)" "$(AGENT)" > $(CONFIG); \
 		echo "$(CONFIG) を作りました。"; \
 	fi
 
