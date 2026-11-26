@@ -40,14 +40,14 @@ brew_install go go "Go（lacia をビルドします）" "https://go.dev/dl/ か
 
 # 手元のソースからビルドするときは、GitHub から取得しません。
 if [ -z "$LACIA_SRC" ] && have git; then
-	if GIT_TERMINAL_PROMPT=0 git ls-remote https://github.com/imos/lacia.git HEAD >/dev/null 2>&1; then
-		ok "imos/lacia を読む権限"
+	if "$(dirname "$0")/checkout-source.sh" check >/dev/null 2>&1; then
+		ok "imos/lacia-dev を読む権限"
 	else
 		brew_install gh gh "gh（GitHub の認証に使います）" "https://cli.github.com/ から入れてください。"
 		if have gh && ! gh auth status >/dev/null 2>&1; then
 			todo "GitHub へのログイン" "gh auth login のあと、gh auth setup-git を実行してください。"
 		elif have gh; then
-			todo "imos/lacia を読む権限" "gh auth setup-git を実行してください。それでも読めないときは、リポジトリーの権限を、ひな形を案内した方に確かめてください。"
+			todo "imos/lacia-dev を読む権限" "gh auth setup-git を実行してください。それでも読めないときは、リポジトリーの権限を、ひな形を案内した方に確かめてください。"
 		fi
 	fi
 fi

@@ -45,7 +45,12 @@ binary: prepare
 ifdef LACIA_SRC
 	cd $(LACIA_SRC) && go build -o $(LACIA) ./cmd/lacia
 else
-	GOPRIVATE=github.com/imos GOBIN=$(PREFIX)/bin go install github.com/imos/lacia/cmd/lacia@$(VERSION)
+	@set -eu; \
+	build=$$(mktemp -d); \
+	trap 'rm -rf "$$build"' 0; \
+	out=$$(cd "$(PREFIX)/bin" && pwd)/lacia; \
+	tools/checkout-source.sh checkout "$$build/source" "$(VERSION)"; \
+	cd "$$build/source" && go build -o "$$out" ./cmd/lacia
 endif
 	@$(LACIA) rules list >/dev/null
 
@@ -66,11 +71,14 @@ serve:
 # 通知アプリは、メニューバーに常駐して、確認待ちのタスクと会議を知らせます。
 # すでに入っているときは、何も変えずに止まります。
 notifier:
-	@src="$(LACIA_SRC)"; \
+	@set -eu; \
+	src="$(LACIA_SRC)"; \
+	build=$$(mktemp -d); \
+	trap 'rm -rf "$$build"' 0; \
 	if [ -z "$$src" ]; then \
-		src=$$(GOPRIVATE=github.com/imos go mod download -json github.com/imos/lacia@$(VERSION) | sed -n 's/.*"Dir": "\(.*\)".*/\1/p'); \
+		src="$$build/source"; \
+		tools/checkout-source.sh checkout "$$src" "$(VERSION)"; \
 	fi; \
-	build=$$(mktemp -d) && \
 	python3 "$$src/macos/notifier/manage.py" build "$$build/Lacia Notifications.app" && \
 	python3 "$$src/macos/notifier/manage.py" install "$$build/Lacia Notifications.app" --lacia "$(LACIA)" --url "$(URL)" && \
 	python3 "$$src/macos/notifier/manage.py" start
