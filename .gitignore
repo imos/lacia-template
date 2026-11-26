@@ -1,5 +1,6 @@
 # 作業用のファイル、ダウンロード、キャッシュ
 /local/
+/.lacia/source/
 /tmp/
 .DS_Store
 __pycache__/

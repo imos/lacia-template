@@ -25,19 +25,25 @@
 
 使い始める前に、[基本の情報と好み](memory/profile.md)と[アカウントの対応](memory/accounts.md)を、ご自分の内容で埋めてください。どちらにも、書く場所の説明と架空の記入例があります。`lacia init` が記憶へ書くのは、空欄の呼び名だけです。使わない項目は消して構いません。
 
+Googleの外部向けOAuthクライアントをテスト中の設定で使う場合、テストユーザーとして登録したアカウントだけが連携でき、許可は7日で切れます。[GoogleのOAuthクライアントの公開状態](https://support.google.com/cloud/answer/15549945?hl=ja)
+
 ## 決まった時刻に動かす
 
-Mac 1台で使うときは、予約に宛先を書く必要はありません。予約は、手順3で選んだ Codex または Claude Code で動きます。`schedules/` に、たとえば次のような内容で `morning.md` を置きます。
+Mac 1台で使うときは、予約に宛先を書く必要はありません。予約は、手順3で選んだ Codex または Claude Code で動きます。[定期タスクのひな形](routines/S1001/routine.md)は、`routines/S1001/routine.md` に停止した状態で置いてあります。確かめたい対象と手順を書いて、動かしたいときに `enabled: true` にします。朝8時に動かす場合は、冒頭を次のようにします。
 
 ```markdown
 ---
+id: S1001
 title: 朝の確認
+area: personal
 daily: "08:00"
+output: matters
 conversation: side
+enabled: true
 ---
-
-きょうの予定を確認し、予定があるときだけ短く知らせてください。
 ```
+
+`lacia schedules` で、定期タスクの時刻と有効かどうかを確かめられます。新しく定期タスクを足すときは、使っていない固定IDをディレクトリー名と `id` の両方に書きます。
 
 予約の時刻に Mac が眠っていたときは、起きたあとに実行します。眠っていたあいだの回が何回あっても、1回にまとめます。
 
@@ -74,7 +80,7 @@ git pull template main
 make install
 ```
 
-`AGENTS.md`、`Makefile`、`LACIA_VERSION` を書き換えていなければ、取り込みは衝突しません。
+両方で同じファイルを変更していると、取り込みが衝突することがあります。手元の記録や設定を残して、ひな形で変わった箇所を取り込んでください。
 
 ## ライセンス
 
