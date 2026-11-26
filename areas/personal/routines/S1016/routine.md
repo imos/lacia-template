@@ -1,7 +1,6 @@
 ---
 id: S1016
 output: matters
-area: personal
 title: local/ の作業用のファイルを点検して片づける
 daily: "10:00"
 conversation: side
@@ -18,7 +17,7 @@ enabled: true
 
 ## すること
 
-[local/ の日次点検の手順](../../areas/personal/procedures/local-storage.md)に従い、容量、作業の状態、成果の保存先、再生成の方法を確かめ、不要と判断できる作業用のファイルを片づけます。
+[local/ の日次点検の手順](../../procedures/local-storage.md)に従い、容量、作業の状態、成果の保存先、再生成の方法を確かめ、不要と判断できる作業用のファイルを片づけます。
 
 ## しないこと
 

@@ -31,7 +31,7 @@ Googleの外部向けOAuthクライアントをテスト中の設定で使う場
 
 ## 決まった時刻に動かす
 
-Mac 1台で使うときは、予約に宛先を書く必要はありません。予約は、手順3で選んだ Codex または Claude Code で動きます。[定期タスクのひな形](routines/S1001/routine.md)は、`routines/S1001/routine.md` に停止した状態で置いてあります。確かめたい対象と手順を書いて、動かしたいときに `enabled: true` にします。朝8時に動かす場合は、冒頭を次のようにします。
+Mac 1台で使うときは、予約に宛先を書く必要はありません。予約は、手順3で選んだ Codex または Claude Code で動きます。[定期タスクのひな形](areas/personal/routines/S1001/routine.md)は、`areas/personal/routines/S1001/routine.md` に停止した状態で置いてあります。確かめたい対象と手順を書いて、動かしたいときに `enabled: true` にします。朝8時に動かす場合は、冒頭を次のようにします。
 
 ```markdown
 ---
@@ -63,7 +63,7 @@ enabled: true
 | `.lacia/calendars.json` | 予定を読むカレンダーの一覧 | `lacia init` と自分 |
 | `memory/` | 基本の情報、アカウントの対応、いまの状況 | 自分とレイシア |
 | `tools/` | `make` が使うスクリプト | 書き換えません |
-| `routines/` | 決まった時刻に動かす仕事 | 自分とレイシア |
+| `areas/<領域>/routines/` | 決まった時刻に動かす仕事 | 自分とレイシア |
 | `areas/work/`、`areas/personal/` | 領域ごとの、タスク（`tasks/`）、プロジェクト（`projects/`）、知識（`knowledge/`）、手順（`procedures/`） | レイシアと自分 |
 
 共通の決まりは、`lacia` の実行ファイルに入っています。`lacia rules` で読めます。変えたいときは、`rules/<名前>.md` に同じ名前の文書を置くと、そちらが使われます。節を足すだけのときは、`rules/<名前>.local.md` に書くと、同じ名前の文書の最後に足されます。
@@ -83,6 +83,8 @@ make install
 ```
 
 両方で同じファイルを変更していると、取り込みが衝突することがあります。手元の記録や設定を残して、ひな形で変わった箇所を取り込んでください。
+
+設定の `format` が1のままなら、対応する `lacia` を入れてから、サーバーを止めた状態で `lacia migrate --dry-run` を実行します。固定IDと移動先を確かめ、`lacia migrate` で領域の下へ移します。移行後に `lacia schedules` と `lacia doctor --links` を確かめます。詳しい手順は[記録の形式を移す](https://github.com/imos/lacia/blob/main/docs/design/records.md#形を移すlacia-migrate)にあります。
 
 ## ライセンス
 
