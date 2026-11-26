@@ -16,4 +16,4 @@ credentials/
 # 大きな成果物は、Git に入れません
 /areas/*/tasks/*/*/files/
 
-/routines/*/files/
+/areas/*/routines/*/files/

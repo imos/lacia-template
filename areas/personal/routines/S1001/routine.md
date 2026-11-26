@@ -1,7 +1,6 @@
 ---
 id: S1001
 title: 予定された確認を行います
-area: personal
 daily: "09:00"
 output: matters
 conversation: side
