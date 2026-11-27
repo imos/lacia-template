@@ -1,11 +1,11 @@
 #!/bin/sh
-# 固定した版の本体を、LACIA_SOURCE に書いた取得先から Git で取得します。
+# LACIA_SOURCE に書いたリポジトリーから、指定した版の本体をGitで取得します。
 #
 #   tools/checkout-source.sh source                   取得先を表示します
 #   tools/checkout-source.sh check                    取得先を読めるかを確かめます
 #   tools/checkout-source.sh checkout <ディレクトリー> <版>
 #
-# LACIA_SOURCE がない、以前の記録では、これまでの取得先を使います。
+# LACIA_SOURCE がない以前の記録では、従来の取得先を使います。
 set -eu
 
 root=$(cd "$(dirname "$0")/.." && pwd)
@@ -30,7 +30,7 @@ checkout)
     git -C "$dir" checkout --quiet --detach FETCH_HEAD
     ;;
 *)
-    printf '%s\n' 'source、check、checkout <ディレクトリー> <版> のどれかを指定してください。' >&2
+    printf '%s\n' '取得先を表示するには source、読み取りを確かめるには check、本体を取得するには checkout <ディレクトリー> <版> を指定してください。' >&2
     exit 2
     ;;
 esac
