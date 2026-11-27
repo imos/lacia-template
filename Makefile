@@ -1,6 +1,6 @@
 # レイシアを、この記録のリポジトリーで使えるようにします。
 #
-#   make install                      要るものを確かめ、LACIA_VERSION の版の lacia をビルドして、設定を作ります
+#   make install                      要るものを確かめ、LACIA_SOURCE の取得先から LACIA_VERSION の版の lacia を取得してビルドし、設定を作ります
 #   make check                        要るものがそろっているかを、確かめるだけです
 #   make install LACIA_SRC=../lacia   手元のソースからビルドします（コードを直したい方へ）
 #   make serve                        サーバーを動かします（http://127.0.0.1:10148/）

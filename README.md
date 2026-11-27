@@ -7,7 +7,7 @@
 ## 必要なもの
 
 - Go（`lacia` を、手元でビルドします）
-- Git と、`imos/lacia` を読める GitHub の認証（`gh auth login` のあと、`gh auth setup-git`）
+- Git と、本体（`lacia` のソース）を読める GitHub の認証（`gh auth login` のあと、`gh auth setup-git`）。取得先は `LACIA_SOURCE` にあります。
 - Codex か Claude Code の、どちらか
 
 `make install` は、最初にこれらを確かめます。Homebrew が入っていれば、足りない Go と gh を自動で入れます。ログインが要るものと、Codex か Claude Code かの選択は、入れ方を案内して止まります。確かめるだけのときは、`make check` を実行します。
@@ -49,13 +49,14 @@ enabled: true
 
 予約の時刻に Mac が眠っていたときは、起きたあとに実行します。眠っていたあいだの回が何回あっても、1回にまとめます。
 
-別の端末で予約を動かすときは、その端末をサーバーへ登録し、会話の宛先を `to: local-codex` のように書きます。端末の登録と通知アプリの設定は、[予約の説明](https://github.com/imos/lacia-dev/blob/main/docs/design/schedules.md#実行先を選ぶ)にあります。
+別の端末で予約を動かすときは、その端末をサーバーへ登録し、会話の宛先を `to: local-codex` のように書きます。端末の登録と通知アプリの設定は、本体のソースの `docs/design/schedules.md` の「実行先を選ぶ」にあります。取得先は `LACIA_SOURCE` にあります。
 
 ## 置いてあるもの
 
 | 場所 | 中身 | だれが書くか |
 | --- | --- | --- |
-| `LACIA_VERSION` | `imos/lacia-dev` から取得する `lacia` のコミット | ひな形の更新で変わります |
+| `LACIA_SOURCE` | 本体（`lacia` のソース）の取得先のURL | ひな形の更新で変わります |
+| `LACIA_VERSION` | 本体から取得する `lacia` のコミット | ひな形の更新で変わります |
 | `AGENTS.md`、`CLAUDE.md` | `lacia rules` を読むように伝える、数行の案内 | 書き換えません |
 | `rules/local.md` | このリポジトリーだけの決まり | 自分とレイシア |
 | `.lacia/config.json` | 領域と、ご本人の呼び名 | 自分 |
@@ -86,7 +87,7 @@ make install
 
 両方で同じファイルを変更していると、取り込みが衝突することがあります。手元の記録や設定を残して、ひな形で変わった箇所を取り込んでください。
 
-設定の `format` が1のままなら、対応する `lacia` を入れてから、サーバーを止めた状態で `lacia migrate --dry-run` を実行します。固定IDと移動先を確かめ、`lacia migrate` で領域の下へ移します。移行後に `lacia schedules` と `lacia doctor --links` を確かめます。詳しい手順は[記録の形式を移す](https://github.com/imos/lacia-dev/blob/main/docs/design/records.md#形を移すlacia-migrate)にあります。
+設定の `format` が1のままなら、対応する `lacia` を入れてから、サーバーを止めた状態で `lacia migrate --dry-run` を実行します。固定IDと移動先を確かめ、`lacia migrate` で領域の下へ移します。移行後に `lacia schedules` と `lacia doctor --links` を確かめます。詳しい手順は、本体のソースの `docs/design/records.md` の「形を移す（`lacia migrate`）」にあります。
 
 ## ライセンス
 
