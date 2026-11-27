@@ -1,26 +1,26 @@
 #!/bin/sh
-# サーバーを、ログインのときに自動で起動するようにします（macOS の launchd）。
+# macOSのlaunchdを使い、ログイン時にサーバーを自動で起動します。
 #
 #   tools/autostart.sh on <lacia> <設定ファイル> <状態のディレクトリー>
 #   tools/autostart.sh off
 #   tools/autostart.sh status
 #
-# 登録するのは、自分のユーザーの LaunchAgent だけです。管理者の権限は使いません。
-# サーバーが止まったときは、launchd が30秒あけて起動し直します。
+# ログイン中のユーザーのLaunchAgentに登録します。管理者権限は使いません。
+# サーバーが止まると、launchdが起動し直します。起動を繰り返すときの間隔は最短30秒です。
 
 set -e
 label="${LACIA_LABEL:-jp.imoz.lacia.serve}"
 plist="$HOME/Library/LaunchAgents/$label.plist"
 target="gui/$(id -u)"
 
-# ほかのものが置いた同じ名前のファイルは、触りません。
+# 同じ名前のファイルがあれば、このサーバーの登録名が書かれているかを確かめます。
 ours() { [ ! -e "$plist" ] || grep -q "<string>$label</string>" "$plist"; }
 
 case "$1" in
 on)
 	lacia="$2"; config="$3"; state="$4"
-	[ -x "$lacia" ] && [ -f "$config" ] && [ -n "$state" ] || { echo "先に make install を実行してください。"; exit 1; }
-	ours || { echo "$plist は、別のものが置いたファイルのようです。そのままにしました。"; exit 1; }
+	[ -x "$lacia" ] && [ -f "$config" ] && [ -n "$state" ] || { echo "lacia の実行ファイル、設定ファイル、状態を保存する場所が必要です。make install を済ませてから、make autostart を実行してください。"; exit 1; }
+	ours || { echo "$plist がこのサーバーの設定かどうかを確かめられません。ファイルの登録名を確かめてください。"; exit 1; }
 	mkdir -p "$HOME/Library/LaunchAgents" "$state"
 	launchctl bootout "$target/$label" 2>/dev/null || true
 	# launchd は、シェルの設定を読みません。Codex、Claude Code、Git を見つけられるように、
@@ -46,21 +46,21 @@ on)
 EOF
 	chmod 600 "$plist"
 	launchctl bootstrap "$target" "$plist"
-	echo "ログインのときに、サーバーが自動で起動するようにしました。いまも起動しています。"
-	echo "  ログ: $state/serve.log"
-	echo "  やめるとき: make autostart-off"
+	echo "ログイン時にサーバーを自動で起動するように設定しました。"
+	echo "  ログは $state/serve.log で読めます。"
+	echo "  自動起動をやめるときは make autostart-off を実行してください。"
 	;;
 off)
-	ours || { echo "$plist は、別のものが置いたファイルのようです。そのままにしました。"; exit 1; }
+	ours || { echo "$plist がこのサーバーの設定かどうかを確かめられません。ファイルの登録名を確かめてください。"; exit 1; }
 	launchctl bootout "$target/$label" 2>/dev/null || true
 	rm -f "$plist"
-	echo "自動の起動をやめて、サーバーを止めました。"
+	echo "サーバーの自動起動の設定を外しました。"
 	;;
 status)
 	if launchctl print "$target/$label" >/dev/null 2>&1; then
 		launchctl print "$target/$label" | grep -E '^	(state|pid|last exit code) =' || true
 	else
-		echo "自動の起動は、登録していません。"
+		echo "サーバーの自動起動の登録を確かめられませんでした。"
 	fi
 	;;
 *)

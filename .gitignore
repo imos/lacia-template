@@ -5,7 +5,7 @@
 .DS_Store
 __pycache__/
 
-# 認証の情報は、ここへ置きません
+# 認証情報が入るファイルは、Gitの管理から外します。
 .env
 .env.*
 *.pem
@@ -13,7 +13,7 @@ __pycache__/
 auth.json
 credentials/
 
-# 大きな成果物は、Git に入れません
+# 大きな成果物はGitに入れません。
 /areas/*/tasks/*/*/files/
 
 /areas/*/routines/*/files/
